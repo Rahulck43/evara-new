@@ -25,7 +25,6 @@ var instance = new Razorpay({
 
 module.exports = {
     getHomeProducts:()=>{
-        console.log('calling');
         return new Promise((resolve,reject)=>{
             productModel.aggregate([
                 { $match: { isDeleted: false } },
@@ -59,6 +58,8 @@ module.exports = {
                     response.user = newUserDbDocument
                     response.status = true
                     resolve(response)
+                }).catch(()=>{
+                    reject()
                 })
             }
         })
@@ -79,7 +80,6 @@ module.exports = {
                     } else {
                         reject()
                     }
-
                 })
             }
         })
@@ -129,7 +129,6 @@ module.exports = {
                     resolve(count)
                 }
             }).catch((error) => {
-                console.log(error)
                 reject()
             })
         })
@@ -254,6 +253,8 @@ module.exports = {
                     { $pull: { products: { item: details.product } } }
                 ).then(() => {
                     resolve({ removeProduct: true })
+                }).catch(()=>{
+                    reject()
                 })
             } else {
                 cartModel.updateOne(
@@ -261,6 +262,8 @@ module.exports = {
                     { $inc: { 'products.$.quantity': details.count } }
                 ).then((response) => {
                     resolve({ status: true })
+                }).catch(()=>{
+                    reject()
                 })
             }
         })
@@ -281,15 +284,12 @@ module.exports = {
     },
 
     removeFromWishlist: function (userId, productId) {
-        console.log(userId)
-        console.log(productId)
         return new Promise((resolve, reject) => {
             wishlistModel.updateOne(
                 { id: userId },
                 { $pull: { products: productId } },
                 { new: true }
             ).then((wishlist) => {
-                console.log(wishlist);
                 resolve()
             }).catch(() => {
                 reject()
@@ -352,7 +352,6 @@ module.exports = {
     placeOrder: function (cartDetails, orderDetails, userId) {
         const finalPrice = orderDetails.finalPrice
         return new Promise((resolve, reject) => {
-
             let status = orderDetails.payment_option === 'COD' || orderDetails.payment_option === 'wallet' ? 'Order Placed' : 'Pending';
             let orderProducts = [];
             let totalAmount = 0
@@ -425,12 +424,13 @@ module.exports = {
     },
 
     changePaymentStatus: (orderId) => {
-        console.log(orderId + 'changestatus');
         return new Promise((resolve, reject) => {
             orderModel.findByIdAndUpdate(orderId,
                 { $set: { status: 'Order Placed' } }
             ).then(() => {
                 resolve()
+            }).catch(()=>{
+                reject()
             })
         })
     },
@@ -440,7 +440,6 @@ module.exports = {
             orderModel.find({ id: userId }).then((response) => {
                 resolve(response)
             }).catch((error) => {
-                console.log(error);
                 reject(error)
             })
         })
@@ -484,7 +483,6 @@ module.exports = {
     },
 
     generateInvoice: (orderDetails) => {
-        console.log(orderDetails);
         return new Promise((resolve, reject) => {
             const { id, name, billingAddress, city, district, state, zipcode, phone, paymentOption, status, products, date, totalAmount } = orderDetails;
 
@@ -558,7 +556,6 @@ module.exports = {
 
                 resolve()
             }).catch((err) => {
-                console.log(err);
                 reject()
             })
         })
@@ -584,7 +581,6 @@ module.exports = {
                     resolve()
                 }
             }).catch((err) => {
-                console.log(err);
                 reject()
             })
         })
@@ -632,7 +628,6 @@ module.exports = {
             ).then((result) => {
                 resolve()
             }).catch((error) => {
-                console.log(error);
                 reject()
             })
         })
@@ -648,7 +643,6 @@ module.exports = {
                     reject()
                 }
             }).catch((error) => {
-                console.log(error);
                 reject()
             })
         })
@@ -718,6 +712,8 @@ module.exports = {
                 userData.addresses.splice(index, 1) // Remove 1 element at index
                 userData.save().then((updatedUserData) => {
                     resolve(updatedUserData);
+                }).catch(()=>{
+                    reject()
                 })
             })
         })

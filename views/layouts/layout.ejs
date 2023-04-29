@@ -186,7 +186,7 @@
               <ul>
                 <ul>
                   <li><a class="active" href="/shop">All Categories</a></li>
-                  <% categories.forEach(category => { %>
+                  <% (locals.categories || []).forEach(category => { %>
                     <% if(category.status) { %>
                 <li><a href="/shop?category=<%= category.category %>"><i class="evara-font-dress"></i><%= category.category %></a></li>
                 <% } %>
@@ -418,7 +418,7 @@
           <div class="categori-dropdown-wrap categori-dropdown-active-small">
             <ul>
               
-              <% categories.forEach(category => { %>
+              <% (locals.categories || []).forEach(category => { %>
                 <% if(category.status) { %>
             <li><a href="/shop?category=<%= category.category %>"><i class="evara-font-dress"></i><%= category.category %></a></li>
             <% } %>

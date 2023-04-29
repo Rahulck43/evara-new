@@ -7,30 +7,28 @@ const session = require('express-session');
 
 
 module.exports = {
-    getCategories: (req,res,next)=>{
+    getCategories: (req, res, next) => {
         productHelper.getCategories().then((categories) => {
-            res.locals.categories=categories
+            res.locals.categories = categories
         })
         next()
     },
 
-    getHome: (req, res) => {
+    getHome: async (req, res) => {
         const user = req.session.user
-        bannerHelper.getAllBanners().then((banners) => {
-            userHelper.getHomeProducts().then((products) => {
-               
-                    if (user) {
-                        userHelper.getCartCount(user._id).then((count) => {
-                            userHelper.getWishlistCount(user._id).then((wcount) => {
-                                res.render('user/index', { user, count, wcount, banners, products })
-                            })
-                        })
-                    } else {
-                        res.render('user/index', { user, banners, products })
-                    }
-                
-            })
-        })
+        try {
+            const banners = await bannerHelper.getAllBanners()
+            const products = await userHelper.getHomeProducts()
+            if (user) {
+                const count = userHelper.getCartCount(user._id)
+                const wcount = userHelper.getWishlistCount(user._id)
+                res.render('user/index', { user, count, wcount, banners, products })
+            } else {
+                res.render('user/index', { user, banners, products })
+            }
+        } catch {
+            res.redirect('/')
+        }
     },
 
     // ***************************************************LOGIN*************************************************
@@ -121,6 +119,8 @@ module.exports = {
                     res.render('user/shop', { user, products, pagination, categories })
                 }
             })
+        }).catch(() => {
+            res.redirect('/')
         })
     },
 
@@ -143,8 +143,9 @@ module.exports = {
                 })
             } else {
                 res.render('user/product', { user, product })
-
             }
+        }).catch(() => {
+            res.redirect('/')
         })
     },
 
@@ -158,7 +159,6 @@ module.exports = {
                 })
             })
         }).catch((error) => {
-            console.log(error);
             res.render('user/cart', { user, error })
         })
     },
@@ -225,7 +225,6 @@ module.exports = {
                     res.render('user/checkout', { user, products, subtotal, count, wcount, addresses, coupons, error })
                 })
             }).catch((error) => {
-                console.log(error);
                 res.redirect('/cart')
             })
         }).catch((error) => {
@@ -248,14 +247,12 @@ module.exports = {
                 res.json({ wallet: true })
             } else if (orderDetails.payment_option === 'razorPay') {
                 userHelper.generateRazorpay(order).then((razor) => {
-                    console.log('razorpayorder generated');
                     userHelper.clearCart(userId).then(() => {
                         res.json({ razor, razorPay: true })
                     })
                 })
             }
         }).catch((err) => {
-            console.log(err);
             res.redirect('/cart')
         })
     },
@@ -266,6 +263,8 @@ module.exports = {
         const amount = req.query.amount
         if (wallet) {
             userHelper.updateWallet(user._id, amount).then(() => {
+                res.render('user/order-placed', { user })
+            }).catch(() => {
                 res.render('user/order-placed', { user })
             })
         } else {
@@ -293,36 +292,41 @@ module.exports = {
     getMyOrders: (req, res) => {
         const user = req.session.user
         const userId = user._id
-        userHelper.myOrders(userId).then((orders) => {
-            userHelper.getCartCount(user._id).then((count) => {
-                userHelper.getWishlistCount(user._id).then((wcount) => {
-                    res.render('user/my-orders', { user, orders, count, wcount })
+        try {
+            userHelper.myOrders(userId).then((orders) => {
+                userHelper.getCartCount(user._id).then((count) => {
+                    userHelper.getWishlistCount(user._id).then((wcount) => {
+                        res.render('user/my-orders', { user, orders, count, wcount })
+                    })
                 })
             })
-        })
+        } catch {
+            res.redirect('/')
+        }
     },
 
     getSingleOrder: (req, res) => {
         const user = req.session.user
         const orderId = req.params.id
-        userHelper.singleOrder(orderId).then((orderDetails) => {
-            userHelper.getCartCount(user._id).then((count) => {
-                res.render('user/single-order', { user, orderDetails, count })
+        try {
+            userHelper.singleOrder(orderId).then((orderDetails) => {
+                userHelper.getCartCount(user._id).then((count) => {
+                    res.render('user/single-order', { user, orderDetails, count })
+                })
             })
-        })
+        } catch {
+            res.redirect('/')
+        }
     },
 
     getInvoice: (req, res) => {
         const orderId = req.params.id
         userHelper.singleOrder(orderId).then((orderDetails) => {
-            console.log(orderDetails);
             userHelper.generateInvoice(orderDetails).then(() => {
-                console.log('Invoice PDF created successfully.');
                 res.download('invoice.pdf')
+            }).catch((err) => {
+                console.log('Error creating invoice PDF:', err);
             })
-                .catch((err) => {
-                    console.log('Error creating invoice PDF:', err);
-                });
         })
     },
 
@@ -365,17 +369,17 @@ module.exports = {
                                 res.render('user/checkout', { user, products, addresses, coupon, subtotal, count, wcount, price })
 
                             }).catch((error) => {
-                                console.log('couldnt find coupons', error);
+                                res.redirect('/checkout');
                             })
                         })
                     }).catch((error) => {
-                        console.log('couldnt find cart count', error);
+                        res.redirect('/checkout');
                     })
                 }).catch((error) => {
-                    console.log('couldnt find cart products', error);
+                    res.redirect('/checkout');
                 })
             }).catch((error) => {
-                console.log('couldnt find cart addresses', error);
+                res.redirect('/checkout');
             })
         }).catch((error) => {
             req.flash('error', error.message);
@@ -391,21 +395,17 @@ module.exports = {
 
     // ******************************************************MY ACCOUNT********************************************
 
-    getMyAccount: (req, res) => {
+    getMyAccount: async (req, res) => {
         const user = req.session.user
-        userHelper.getCartCount(user._id).then((count) => {
-            userHelper.getWishlistCount(user._id).then((wcount) => {
-                userHelper.getWalletAmount(user._id).then((wallet) => {
-                    userHelper.getAddresses(user._id).then((addresses) => {
-                        console.log(addresses);
-                        res.render('user/my-account', { user, count, wcount, wallet, addresses })
-                    }).catch(() => {
-                        res.render('user/my-account', { user, count, wcount, wallet })
-
-                    })
-                })
-            })
-        })
+        try {
+            const count = await userHelper.getCartCount(user._id)
+            const wcount = await userHelper.getWishlistCount(user._id)
+            const wallet = await userHelper.getWalletAmount(user._id)
+            const addresses = await userHelper.getAddresses(user._id)
+            res.render('user/my-account', { user, count, wcount, wallet, addresses })
+        } catch {
+            res.redirect('/')
+        }
     },
 
 
@@ -449,20 +449,24 @@ module.exports = {
 
     postAddAddress: (req, res) => {
         const user = req.session.user
-        console.log(req.body)
         userHelper.addAddress(user, req.body).then(() => {
             res.redirect('/my-account')
+        }).catch(() => {
+            res.redirect('/')
         })
     },
 
     getEditAddress: (req, res) => {
         const user = req.session.user
         const address = JSON.parse(req.query.address);
-        console.log(address.name);
         userHelper.getWishlistCount(user._id).then((wcount) => {
             userHelper.getCartCount(user._id).then((count) => {
                 res.render('user/edit-address', { user, count, wcount, address })
+            }).catch(() => {
+                res.redirect('/')
             })
+        }).catch(() => {
+            res.redirect('/')
         })
     },
 
@@ -470,13 +474,10 @@ module.exports = {
         const user = req.session.user
         const address = JSON.parse(req.query.address);
         const newAddress = req.body
-        console.log(address);
-        console.log(newAddress);
         userHelper.editAddress(user._id, address, newAddress).then((updatedUser) => {
             res.redirect('/my-account')
         }).catch(() => {
             res.redirect('/my-account')
-
         })
     },
 
@@ -484,6 +485,8 @@ module.exports = {
         const user = req.session.user
         const address = JSON.parse(req.query.address);
         userHelper.removeAddress(user._id, address).then(() => {
+            res.redirect('/my-account')
+        }).catch(()=>{
             res.redirect('/my-account')
         })
     }

@@ -30,7 +30,6 @@ module.exports = {
                     reject()
                 }
             }).catch((error) => {
-                console.log(error);
                 reject(error)
             })
         })
@@ -45,7 +44,6 @@ module.exports = {
                     reject()
                 }
             }).catch((error) => {
-                console.log(error);
                 reject(error)
             })
         })
@@ -67,7 +65,6 @@ module.exports = {
             bannerModel.findByIdAndUpdate( bannerId, updateFields).then(() => {
                 resolve()
             }).catch((error) => {
-                console.log(error);
                 reject()
             })
         })
@@ -78,7 +75,6 @@ module.exports = {
             bannerModel.findByIdAndDelete(bannerId).then(()=>{
                 resolve()
             }).catch((error)=>{
-                console.log(error);
                 reject(error)
             })
         })

@@ -17,27 +17,24 @@ let cat
 
 module.exports = {
 
-    getDashboard: (req, res) => {
-        if (req.session.admin) {
-            adminHelper.getSalesDetails().then((salesByMonth) => {
-                adminHelper.getYearlySalesDetails().then((salesByYear) => {
-                    adminHelper.allOrders().then((orders) => {
-                        adminHelper.getOrdersByDate().then((ordersByDate) => {
-                            adminHelper.getCategorySales().then((categorySales) => {
-                                productHelper.getAllProducts().then((allProducts) => {
-                                    adminHelper.getAllUsers().then((allUsers) => {
-                                        const currentMonth = new Date().getMonth() + 1;
-                                        const currentMonthSales = salesByMonth.find(sales => sales._id === currentMonth)
-                                        res.render('admin/index', { layout, salesByMonth, salesByYear, orders, currentMonthSales, allProducts, allUsers, ordersByDate, categorySales })
-                                    })
-                                })
-                            })
-                        })
-                    })
-                })
-            })
-        } else {
-            res.render('admin/login', { layout: false });
+    getDashboard: async (req, res) => {
+        try {
+            if (req.session.admin) {
+                const salesByMonth = await adminHelper.getSalesDetails()
+                const salesByYear = await adminHelper.getYearlySalesDetails()
+                const orders = await adminHelper.allOrders()
+                const ordersByDate = await adminHelper.getOrdersByDate()
+                const categorySales = await adminHelper.getCategorySales()
+                const allProducts = await productHelper.getAllProducts()
+                const allUsers = await adminHelper.getAllUsers()
+                const currentMonth = new Date().getMonth() + 1;
+                const currentMonthSales = await salesByMonth.find(sales => sales._id === currentMonth)
+                res.render('admin/index', { layout, salesByMonth, salesByYear, orders, currentMonthSales, allProducts, allUsers, ordersByDate, categorySales })
+            } else {
+                res.render('admin/login', { layout: false });
+            }
+        } catch (error) {
+            res.render('admin/login', { layout: false })
         }
     },
 
@@ -61,11 +58,10 @@ module.exports = {
     },
 
     getProductsPage: (req, res) => {
-        productHelper.getAllProducts().then((response) => {
-            const products = response
+        productHelper.getAllProducts().then((products) => {
             res.render('admin/productlist', { layout, products })
         }).catch((error) => {
-            res.render('admin/productlist')
+            res.render('admin/productlist', { layout })
         })
     },
 
@@ -73,6 +69,8 @@ module.exports = {
         const admin = req.session.admin
         productHelper.getCategories().then((categories) => {
             res.render('admin/addproducts', { admin, layout, categories })
+        }).catch((error) => {
+            res.redirect('/admin')
         })
     },
 
@@ -83,25 +81,25 @@ module.exports = {
         })
         productHelper.addProduct(req.body, images).then(() => {
             res.redirect('/admin/products')
+        }).catch(() => {
+            res.redirect('/admin')
         })
     },
 
-    getEditProduct: (req, res) => {
-        const productId = req.params.id
-        productHelper.findProduct(productId).then((product) => {
-            console.log(product.category);
-            productHelper.getCategories().then((categories) => {
-                res.render('admin/editproduct', { product, layout, categories })
-            })
-        }).catch(() => {
+    getEditProduct: async (req, res) => {
+        try {
+            const productId = req.params.id
+            const product = await productHelper.findProduct(productId)
+            const categories = await productHelper.getCategories()
+            res.render('admin/editproduct', { product, layout, categories })
+        } catch {
             res.redirect('/admin/products')
-        })
+        }
     },
 
     postEditProduct: (req, res) => {
         let files = req.files
         const productId = req.params.id
-        console.log(req.body);
         let images
         if (!files[0]) {
             images = false
@@ -112,21 +110,22 @@ module.exports = {
         }
         productHelper.editProduct(productId, req.body, images).then((resolve) => {
             res.redirect('/admin/products')
+        }).catch(() => {
+            res.redirect('/admin/products')
         })
     },
 
     getDeleteProduct: (req, res) => {
         const productId = req.params.id
-        productHelper.deleteProduct(productId).then((resolve) => {
+        productHelper.deleteProduct(productId).then((result) => {
             res.redirect('/admin/products')
         }).catch((error) => {
-            console.error(error)
+            res.redirect('/admin/products')
         })
     },
 
     getUsersList: (req, res) => {
-        adminHelper.getAllUsers().then((response) => {
-            const users = response
+        adminHelper.getAllUsers().then((users) => {
             res.render('admin/userlist', { layout, users })
         }).catch((error) => {
             res.render('admin/userlist', { layout })
@@ -136,14 +135,12 @@ module.exports = {
     blockUser: (req, res, next) => {
         const id = req.params.id
         adminHelper.blockUser(id).then((response) => {
-            console.log('response', response);
             res.status(202).json(response)
         })
     },
 
     getCategoryList: (req, res) => {
-        categoryHelper.getAllCategory().then((response) => {
-            const categories = response
+        categoryHelper.getAllCategory().then((categories) => {
             if (cat) {
                 let category = cat
                 res.render('admin/category', { layout, categories, category })
@@ -159,6 +156,8 @@ module.exports = {
         categoryHelper.getCategory(id).then((response) => {
             cat = response
             res.redirect('/admin/category')
+        }).catch(() => {
+            res.redirect('/admin/category')
         })
     },
 
@@ -166,18 +165,22 @@ module.exports = {
         const category = req.body.category
         categoryHelper.addCategory(category).then((resolve) => {
             res.redirect('/admin/category')
+        }).catch(() => {
+            res.redirect('/admin/category')
         })
     },
 
-    postEditCategory: (req, res) => {
-        const id = req.params.id
-        const category = req.body.category
-        const oldCategory = req.body.oldCategory
-        categoryHelper.editCategory(id, category).then((result) => {
-            categoryHelper.editCategoryProducts(category, oldCategory).then(() => {
-                res.redirect('/admin/category')
-            })
-        })
+    postEditCategory: async (req, res) => {
+        try {
+            const id = req.params.id
+            const category = req.body.category
+            const oldCategory = req.body.oldCategory
+            await categoryHelper.editCategory(id, category)
+            await categoryHelper.editCategoryProducts(category, oldCategory)
+            res.redirect('/admin/category')
+        } catch (error) {
+            res.redirect('/admin/category')
+        }
     },
 
 
@@ -193,8 +196,9 @@ module.exports = {
 
     getAllOrders: (req, res) => {
         adminHelper.allOrders().then((orders) => {
-
             res.render('admin/all-orders', { layout, orders })
+        }).catch(()=>{
+            res.redirect('/admin')
         })
     },
 
@@ -211,7 +215,6 @@ module.exports = {
     getSingleOrder: (req, res) => {
         const orderId = req.params.id
         adminHelper.singleOrder(orderId).then((orderDetails) => {
-            console.log(orderDetails);
             res.render('admin/single-order', { layout, orderDetails })
         }).catch(() => {
             res.redirect('/admin/orders')
@@ -223,7 +226,6 @@ module.exports = {
         couponHelper.getAllCoupons().then((coupons) => {
             res.render('admin/couponlist', { layout, coupons })
         }).catch((error) => {
-            console.log(error);
             res.status(500).send('Internal Server Error');
         })
     },
@@ -236,7 +238,6 @@ module.exports = {
         couponHelper.addCoupon(req.body).then((newCoupon) => {
             res.redirect('/admin/coupons')
         }).catch((error) => {
-            console.log(error);
             res.redirect('/admin/add-coupon')
         })
     },
@@ -246,7 +247,6 @@ module.exports = {
         couponHelper.findCoupon(couponId).then((coupon) => {
             res.render('admin/editCoupon', { layout, coupon })
         }).catch((error) => {
-            console.log('unable to find the coupon' + error)
             res.redirect('/admin/coupons')
         })
     },
@@ -257,7 +257,6 @@ module.exports = {
         couponHelper.editCoupon(couponId, couponData).then(() => {
             res.redirect('/admin/coupons')
         }).catch((error) => {
-            console.log(error);
             res.redirect('/admin')
         })
     },
@@ -265,6 +264,8 @@ module.exports = {
     getBanners: (req, res) => {
         bannerHelper.getAllBanners().then((banners) => {
             res.render('admin/banners', { layout, banners })
+        }).catch(()=>{
+            res.redirect('/admin')
         })
     },
 
@@ -276,6 +277,8 @@ module.exports = {
         const bannerDetails = req.body
         bannerHelper.addBanner(bannerDetails).then(() => {
             res.redirect('/admin/banners')
+        }).catch(()=>{
+            res.redirect('/admin')
         })
     },
 
@@ -283,6 +286,8 @@ module.exports = {
         const banner = req.params.id
         bannerHelper.findBanner(banner).then((bannerDetails) => {
             res.render('admin/edit-banner', { layout, bannerDetails })
+        }).catch(()=>{
+            res.redirect('/admin')
         })
     },
 
@@ -291,6 +296,8 @@ module.exports = {
         const bannerDetails = req.body
         bannerHelper.editBanner(bannerId, bannerDetails).then(() => {
             res.redirect('/admin/banners')
+        }).catch(()=>{
+            res.redirect('/admin')
         })
     },
 

@@ -86,7 +86,6 @@ module.exports = {
     },
 
     couponValidate: (couponcode, total, user) => {
-        console.log(couponcode);
         return new Promise((resolve, reject) => {
             couponModel.findOne({ couponCode: couponcode }).then((coupon) => {
                 orderModel.findOne({ id: user._id, couponCode: couponcode })
@@ -126,8 +125,6 @@ module.exports = {
     },
 
     findCouponPrice: (total, coupon) => {
-        console.log(total + '*********************total');
-        console.log(coupon + '****************coupon');
         const discount = coupon.discount
         const maxCap = coupon.maxDiscount
         const offer = (discount * total) / 100

@@ -32,7 +32,7 @@ module.exports = {
             return users;
         } catch (error) {
             console.error(error);
-            return null;
+            throw new Error(error)
         }
     },
 
@@ -44,7 +44,7 @@ module.exports = {
             await user.save()
             return user.status
         } catch (error) {
-
+            throw new Error(error)
         }
     },
 
@@ -52,6 +52,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             orderModel.find().then((response) => {
                 resolve(response)
+            }).catch((error) => {
+                reject(error)
             })
         })
 
@@ -164,32 +166,36 @@ module.exports = {
     },
 
     getCategorySales: async () => {
-        const orders = await orderModel.find().populate('products.id', 'category');
-        const categorySales = {};
-      
-        orders.forEach(order => {
-          order.products.forEach(product => {
-            const category = product.id.category;
-            if (category) {
-              if (category in categorySales) {
-                categorySales[category] += 1;
-              } else {
-                categorySales[category] = 1;
-              }
-            }
-          });
-        });
-      
-        const allCategories = await categoryModel.find()
-        const result = allCategories.map(category => {
-          const count = categorySales[category.category] || 0
-          return { name: category.category, count }
-        })
-      
-        return result;
-      }
-      
-
+        try {
+            const orders = await orderModel.find().populate('products.id', 'category');
+            const categorySales = {};
+    
+            orders.forEach(order => {
+                order.products.forEach(product => {
+                    const category = product.id.category;
+                    if (category) {
+                        if (category in categorySales) {
+                            categorySales[category] += 1;
+                        } else {
+                            categorySales[category] = 1;
+                        }
+                    }
+                });
+            });
+    
+            const allCategories = await categoryModel.find()
+            const result = allCategories.map(category => {
+                const count = categorySales[category.category] || 0
+                return { name: category.category, count }
+            })
+    
+            return result;
+        } catch (error) {
+            // console.error('Error in getCategorySales:', error);
+            throw error;
+        }
+    }
+    
 
 
 

@@ -12,23 +12,29 @@ module.exports = {
                     const category = new categoryModel({
                         category: data
                     })
-                    category.save().then(resolve())
+                    category.save().then(resolve()).catch(reject())
                 }
             })
         })
     },
 
     getAllCategory: function () {
-        return new Promise(async (resolve, reject) => {
-            const category = await categoryModel.find()
-            resolve(category)
+        return new Promise( (resolve, reject) => {
+            categoryModel.find().then((category)=>{
+                resolve(category)
+            }).catch(()=>{
+                reject()
+            })
         })
     },
 
     getCategory: function (id) {
-        return new Promise(async (resolve, reject) => {
-            const category = await categoryModel.findOne({ _id: id })
-            resolve(category)
+        return new Promise( (resolve, reject) => {
+            categoryModel.findOne({ _id: id }).then((category)=>{
+                resolve(category)
+            }).catch(()=>{
+                reject()
+            })
         })
     },
 
@@ -36,6 +42,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             categoryModel.updateOne({ _id: id }, { category: newCategory }).then((response) => {
                 resolve()
+            }).catch(()=>{
+                reject()
             })
         })
     },
@@ -47,10 +55,8 @@ module.exports = {
             },
                 { $set: { category: categoryName } }
             ).then((result) => {
-                console.log(result);
                 resolve()
             }).catch((error) => {
-                console.log(error)
                 reject()
             })
         })

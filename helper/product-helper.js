@@ -10,7 +10,7 @@ module.exports = {
 
 
     addProduct: (product, images) => {
-        return new Promise(async (resolve, reject) => {
+        return new Promise( (resolve, reject) => {
             const newProduct = new productModel({
                 name: product.name,
                 description: product.description,
@@ -19,19 +19,21 @@ module.exports = {
                 stockQuantity: product.quantity,
                 image: images
             })
-            newProduct.save()
-            resolve()
+            newProduct.save().then(()=>{
+                resolve()
+            }).catch(()=>{
+                reject()
+            })
         })
     },
 
     getAllProducts: () => {
-        return new Promise(async (resolve, reject) => {
-            const products = await productModel.find()
-            if (products) {
-                resolve(products)
-            } else {
-                reject()
-            }
+        return new Promise( (resolve, reject) => {
+             productModel.find().then((products)=>{
+                 resolve(products)
+             }).catch(()=>{
+                 reject()
+             })
         })
     },
 
@@ -55,8 +57,10 @@ module.exports = {
 
     viewProduct: (proId) => {
         return new Promise((resolve, reject) => {
-            const product = productModel.findOne({ _id: proId }).then((product) => {
+            productModel.findOne({ _id: proId }).then((product) => {
                 resolve(product)
+            }).catch(()=>{
+                reject()
             })
         })
     },
@@ -107,10 +111,13 @@ module.exports = {
 
 
     findProduct: (id) => {
-        return new Promise(async (resolve, reject) => {
+        return new Promise( (resolve, reject) => {
             const productId = id
-            const product = await productModel.findOne({ _id: productId })
+            productModel.findOne({ _id: productId }).then((product)=>{
             resolve(product)
+            }).catch(()=>{
+                reject()
+            })
         })
     },
 
@@ -160,6 +167,8 @@ module.exports = {
                     product.save()
                     resolve()
                 }
+            }).catch(()=>{
+                reject()
             })
         })
     },
@@ -168,8 +177,13 @@ module.exports = {
         return new Promise((resolve, reject) => {
             productModel.findOne({ _id: id }).then((data) => {
                 data.isDeleted = !data.isDeleted
-                data.save()
-                resolve()
+                data.save().then(()=>{
+                    resolve()
+                }).catch(()=>{
+                    reject()
+                })
+            }).catch(()=>{
+                reject()
             })
         })
     },
