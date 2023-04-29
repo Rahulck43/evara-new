@@ -1,0 +1,116 @@
+<main class="main" >
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="/my-account" rel="nofollow">My Account</a>
+                <span></span> My Orders
+            </div>
+        </div>
+    </div>
+    <section class="pt-50 pb-150" >
+        <div  class="container ">
+            <div class="row ">
+                <div class="col-lg-10 m-auto">
+                    <div class="row">
+                        <div class="col-md-8 " style="width: 100rem;" >
+                            <div class="tab-content dashboard-content">
+                                <div class="tab-pane fade active show" id="orders" role="tabpanel"
+                                    aria-labelledby="orders-tab">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Your Orders</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+
+                                                <table class="table" id="myDataTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Order ID</th>
+                                                            <th>Date</th>
+                                                            <th>Total</th>
+                                                            <th>Payment</th>
+                                                            <th>Order Status</th>
+                                                            <th>Items</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- const [day,month,date,year] = order.date.toString().split(' ') -->
+                                                        <% orders.forEach(function(order) {     
+                                                            const [day, month, date, year] = order.date.toString().split(' ');
+                                                            const orderDate = new Date(`${month} ${date}, ${year}`);
+                                                            const currentDate = new Date();
+                                                            const daysDiff = Math.floor((currentDate - orderDate) / (1000 * 60 * 60 * 24));
+                                                            let showReturnOption = false;
+                                                            if (order.status === 'Delivered' && daysDiff <= 14) {
+                                                                showReturnOption = true;
+                                                            }
+                                                        %>
+                                                        <tr>
+                                                            <td><a href="/order/<%= order._id %>"  ><%= order._id %> </a></td>
+                                                            <td><%= `${date}-${month}-${year}` %></td>
+                                                            <td><%= order.totalAmount %></td>
+                                                            <td><%= order.payment_option %></td>
+                                                            <td>
+                                                                <span id="orderStatus" class="badge rounded-pill alert-success"><%= order.status %></span> 
+                                                            </td>
+                                                            <td>x <%= `${order.products.length}` %></td>
+                                                            <td>
+                                                                <% if(showReturnOption) { %>
+                                                                    <button id="<%= order._id %>" class="btn btn-sm btn-secondary"  >
+                                                                        <a style="color: white;" href="/return-order/<%= order._id %>">
+                                                                            <i class="fi-rs-shopping-bag mr-5"></i>Return
+                                                                        </a>
+                                                                    </button>
+                                                                <% } else if (order.status === 'Cancelled' || order.status === 'Returned'|| order.status === 'Pending') { %>
+                                                                <% } else if (order.status === 'Order Placed' || order.status === 'Dispatched') { %>
+                                                                    <button id="<%= order._id %>" class="btn btn-sm btn-secondary" >
+                                                                        <a style="color: white;" href="/cancel-order/<%= order._id %>">
+                                                                            <i class="fi-rs-shopping-bag mr-5"></i>Cancel
+                                                                        </a>
+                                                                    </button>
+                                                                <% } %>
+                                                            </td>
+                                                        </tr>
+                                                        <% }) %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+
+
+<script>
+    
+ function cancelOrder(order){
+    $.ajax({
+        url:'/update-order-status',
+        method:'POST',
+        data: {
+            orderId:order
+        },
+        success: function(response){
+            $('#orderStatus')
+              .removeClass('alert-success')
+              .addClass('alert-danger')
+              .text('Cancelled')
+        }
+    })
+}    
+    
+    
+</script>
+
+

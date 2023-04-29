@@ -1,0 +1,86 @@
+<div class="row mt-3 table-responsive">
+  <div class="col">
+    <table class="table table-hover " id="couponTable">
+      <thead>
+        <tr>
+          <th scope="col">No.</th>
+          <th scope="col">Coupon Name</th>
+          <th scope="col">Coupon Code</th>
+          <th scope="col">Validity</th>
+          <th scope="col">Min Purchase</th>
+          <th scope="col">Discount(%)</th>
+          <th scope="col">Max Discount</th>
+          <th scope="col" class="text-center">Description</th>
+          <th scope="col"><a href="/admin/add-coupon"><button type="button" class="btn  btn-success float-end">Add
+            Coupon</button></a></th>
+          <!-- <th scope="col"></th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <% coupons.forEach((coupon, index)=> {
+          const [day, month, date, year] = coupon.validity.toString().split(' ');
+          %>
+          <% if(coupon.isActive!=true) { %>
+          <tr style="color: red;">
+            <% } else { %>
+          <tr class="">
+            <% } %>
+            <th scope="row">
+              <%= index + 1 %>
+            </th>
+            <td style="font-weight: 500;">
+              <%= coupon.couponName %>
+            </td>
+            <td>
+              <span class="badge rounded-pill alert-success"><strong>
+                <%= coupon.couponCode %></strong>
+              </span>
+            </td>
+            <td style="font-weight: 500;">
+              <%= `${date}-${month}-${year}` %>
+            </td>
+            <td style="font-weight: 500;">
+              ₹ <%= coupon.minPurchase %>
+            </td>
+            <td style="font-weight: 500;">
+              <%= coupon.discount %>%
+            </td>
+            <td style="font-weight: 500;">
+              ₹ <%= coupon.maxDiscount %>
+            </td>
+            <td style="width: 40%;">
+              <%= coupon.description %>
+            </td>
+            <td>
+              <a href="/admin/edit-coupon/<%= coupon._id %>">
+                <button type="button" class="btn btn-primary">Edit</button>
+              </a>
+            </td>
+            <!-- <td>
+              <% if(coupon.isActive==true) { %>
+              <a href="/admin/toggle-coupon/<%= coupon._id %>">
+                <button type="button" class="btn btn-danger">Disable</button>
+              </a>
+              <% } else { %>
+                <a href="/admin/toggle-coupon/<%= coupon._id %>">
+                <button type="button" class="btn btn-success">Enable</button>
+              </a>
+              <% } %>
+            </td> -->
+          </tr>
+          <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<script>
+  $(document).ready(function () {
+    $('#couponTable').DataTable({
+      columnDefs: [
+        { targets: 8, orderable: false }
+      ]
+    });
+  });
+</script>

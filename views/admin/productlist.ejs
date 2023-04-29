@@ -1,0 +1,111 @@
+<table class="table table-hover table-responsive" id="productTable" >
+  <thead>
+    <tr>
+      <th scope="col">No.</th>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+      <th scope="col">Category</th>
+      <th scope="col">Price</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Image</th>
+      <th><a href="/admin/addproduct"><button type="button" class="btn btn-success float-end">Add Product</button></a>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% products.forEach(function(product,index){ %>
+      <tr>
+        <th scope="row">
+          <%= index+1 %>
+        </th>
+        <td>
+          <%= product.name %>
+        </td>
+        <td>
+          <%= product.description %>
+        </td>
+        <td>
+          <%= product.category %>
+        </td>
+        <td>
+          <%= product.price %>
+        </td>
+        <td>
+          <%= product.stockQuantity %>
+        </td>
+        <td> <img src="/images/<%= product.image[0] %>" alt="image" style="height: 3rem;width: 3rem;"> </td>
+        <td><a href="/admin/editproduct/<%= product._id %>"><button type="button" id="<%= product._id %>"
+              class="btn btn-primary">Edit</button></a>
+          <% if(product.isDeleted) { %>
+            <button type="button" id="<%= product._id %>-enable" class="btn btn-success"
+              onclick="toggleProduct('<%= product._id %>')">Enable</button>
+            <% } else { %>
+              <button type="button" id="<%= product._id %>-disable" class="btn btn-danger"
+                onclick="toggleProduct('<%= product._id %>')">Disable</button>
+              <% } %>
+
+
+
+      </tr>
+      <% }) %>
+
+  </tbody>
+
+</table>
+
+
+
+
+<script>
+
+  $(document).ready(function () {
+    $('#productTable').DataTable();
+  });
+
+
+
+  function toggleProduct(productId) {
+    const confirmation = confirm('Are you sure you want to toggle this product?');
+    if (confirmation) {
+      fetch('/admin/deleteproduct/' + productId, { method: 'get' })
+        .then(response => {
+          if (response.ok) {
+            const buttonEnable = document.getElementById(`${productId}-enable`);
+            const buttonDisable = document.getElementById(`${productId}-disable`);
+            if (buttonEnable) {
+              buttonEnable.innerHTML = 'Disable';
+              buttonEnable.classList.toggle('btn-success');
+              buttonEnable.classList.toggle('btn-danger');
+              buttonEnable.setAttribute('id', `${productId}-disable`)
+              toastr.success('product enabled')
+            }
+            if (buttonDisable) {
+              buttonDisable.innerHTML = 'Enable';
+              buttonDisable.classList.toggle('btn-danger');
+              buttonDisable.classList.toggle('btn-success');
+              buttonDisable.setAttribute('id', `${productId}-enable`)
+              toastr.warning('product disabled')
+
+            }
+          } else {
+            response.text().then(error => { 
+              alert('Error toggling product: ' + error.message); 
+            });
+          }
+        })
+        .catch(error => {
+          alert('Error toggling product: ' + error);
+        });
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+</script>

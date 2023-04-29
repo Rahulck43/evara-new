@@ -1,0 +1,261 @@
+<body>
+
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="index.html" rel="nofollow">Home</a>
+                    <span></span> Shop
+                    <span></span> Your Cart
+                </div>
+            </div>
+        </div>
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <% if (locals.error) { %>
+                           <div class="cart-empty">
+                            <h3>  your cart is empty....!!! </h3>  
+                            <p>Why not check out our <strong> <a href="/shop">shop</a> </strong> to find something you like?</p>
+                            </div>
+                            <% } else { %>
+                                <div class="table-responsive">
+                                    <table class="table shopping-summery text-center clean">
+                                        <thead>
+                                            <tr class="main-heading">
+                                                <th scope="col">Image</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Price</th>
+                                                <th scope="col">Quantity</th>
+                                                <th scope="col">Subtotal</th>
+                                                <th scope="col">Remove</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <% products.forEach(function(product) { %>
+                                                    <td class="image product-thumbnail"><img style="height: 4rem;"
+                                                            src="/images/<%= product.image[0] %>" alt="#"></td>
+                                                    <td class="product-des product-name">
+                                                        <h5 class="product-name"><a href="shop-product-right.html">
+                                                                <%= product.name %>
+                                                            </a></h5>
+                                                        <p class="font-xs">
+                                                            <%= product.description %>
+                                                        </p>
+
+                                                    </td>
+                                                    <td class="price" data-title="Price"><span>
+                                                            <%= product.price %>
+                                                        </span></td>
+                                                    <td class="text-center" data-title="Stock" id="productQuantity">
+                                                        <div class="detail-qty border radius m-auto">
+                                                            <a href="#" class="qty-down"
+                                                                onclick="decrementQuantity('<%= user._id %>','<%= product._id %>',-1)">
+                                                                <i class="fi-rs-angle-small-down"></i>
+                                                            </a>
+                                                            <span class="qty-val" id="<%= product._id %>">
+                                                                <%= product.quantity %>
+                                                            </span>
+                                                            <a href="#" class="qty-up"
+                                                                onclick="decrementQuantity('<%= user._id %>','<%= product._id %>',1)">
+                                                                <i class="fi-rs-angle-small-up"></i>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-right" data-title="Cart">
+                                                        <span>
+                                                            <%= product.totalAmount %>
+                                                        </span>
+                                                    </td>
+                                                    <td class="action" data-title="Remove"><a
+                                                            href="/remove-from-cart/<%= product._id %>"
+                                                            class="text-muted"><i class="fi-rs-trash"></i></a></td>
+                                            </tr>
+                                            <% }) %>
+                                                <tr>
+                                                    <td colspan="6" class="text-end">
+                                                        <a href="/clear-cart" class="text-muted"> <i
+                                                                class="fi-rs-cross-small"></i> Clear
+                                                            Cart</a>
+                                                    </td>
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="cart-action text-end">
+                                    <a class="btn  mr-10 mb-sm-15" href="/cart"><i
+                                            class="fi-rs-shuffle mr-10"></i>Update
+                                        Cart</a>
+                                    <a class="btn " href="/shop"><i class="fi-rs-shopping-bag mr-10"></i>Continue
+                                        Shopping</a>
+                                </div>
+                                <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
+                                <div class="row mb-50">
+                                    <!-- <div class="col-lg-6 col-md-12">
+                                <div class="heading_s1 mb-3">
+                                    <h4>Calculate Shipping</h4>
+                                </div>
+                                <p class="mt-15 mb-30">Flat rate: <span class="font-xl text-brand fw-900">5%</span></p>
+                                <form class="field_form shipping_calculator">
+                                    <div class="form-row">
+                                        <div class="form-group col-lg-12">
+                                            <div class="custom_select">
+                                                <select class="form-control select-active">
+                                                    <option value="">Choose a option...</option>
+                                                    <option value="AX">Aland Islands</option>
+                                                    <option value="AF">Afghanistan</option>
+                                                    <option value="ZM">Zambia</option>
+                                                    <option value="ZW">Zimbabwe</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row row">
+                                        <div class="form-group col-lg-6">
+                                            <input required="required" placeholder="State / Country" name="name"
+                                                type="text">
+                                        </div>
+                                        <div class="form-group col-lg-6">
+                                            <input required="required" placeholder="PostCode / ZIP" name="name"
+                                                type="text">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-lg-12">
+                                            <button class="btn  btn-sm"><i
+                                                    class="fi-rs-shuffle mr-10"></i>Update</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="mb-30 mt-50">
+                                    <div class="heading_s1 mb-3">
+                                        <h4>Apply Coupon</h4>
+                                    </div>
+                                    <div class="total-amount">
+                                        <div class="left">
+                                            <div class="coupon">
+                                                <form action="#" target="_blank">
+                                                    <div class="form-row row justify-content-center">
+                                                        <div class="form-group col-lg-6">
+                                                            <input class="font-medium" name="Coupon"
+                                                                placeholder="Enter Your Coupon">
+                                                        </div>
+                                                        <div class="form-group col-lg-6">
+                                                            <button class="btn  btn-sm"><i
+                                                                    class="fi-rs-label mr-10"></i>Apply</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                                    <div class="col-lg-6 col-md-12">
+                                        <div class="border p-md-4 p-30 border-radius cart-totals">
+                                            <div class="heading_s1 mb-3">
+                                                <h4>Cart Totals</h4>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="cart_total_label">Cart Subtotal</td>
+                                                            <td class="cart_total_amount"><span
+                                                                    class="font-lg fw-900 text-brand" id="total1">
+                                                                    <%= locals.subtotal %>
+                                                                </span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="cart_total_label">Shipping</td>
+                                                            <td class="cart_total_amount"> <i class="ti-gift mr-5"></i>
+                                                                Free
+                                                                Shipping</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="cart_total_label">Total</td>
+                                                            <td class="cart_total_amount"><strong><span
+                                                                        class="font-xl fw-900 text-brand" id="total2">
+                                                                        <%= locals.subtotal %>
+                                                                    </span></strong>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <a href="/checkout" class="btn "> <i class="fi-rs-box-alt mr-10"></i>
+                                                Proceed To
+                                                CheckOut</a>
+                                        </div>
+                                    </div>
+                                </div>
+                    
+                    
+                                <% } %>        </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+
+</html>
+
+
+<script>
+
+    function decrementQuantity(cartId, productId, count) {
+        let quantity = parseInt(document.getElementById(productId).innerHTML)
+        count = parseInt(count)
+
+        $.ajax({
+            url: '/change-product-quantity',
+            data: {
+                cart: cartId,
+                product: productId,
+                count: count,
+                quantity: quantity
+            },
+            method: 'post',
+            success: (response) => {
+                if (response.removeProduct) {
+                    toastr.warning('Item removed from Cart..!!')
+
+                } else {
+                    document.getElementById(productId).innerHTML = quantity + count
+                    document.getElementById('total1').innerHTML = response.total
+                    document.getElementById('total2').innerHTML = response.total
+                }
+            }
+        })
+
+        toastr.options = {
+            "preventDuplicates": true,
+            positionClass: 'toast-top-right',
+            timeOut: '3000',
+            extendedTimeOut: '1000',
+            onclick: function () {
+                location.reload();
+            },
+            onHidden: function () {
+                location.reload();
+            },
+            onShown: function () {
+                var btn = $('<button/>', {
+                    text: 'OK',
+                    class: 'btn btn-sm btn-primary',
+                    click: function () {
+                        location.reload();
+                    }
+                });
+                $('.toast:last').append(btn);
+            }
+        }
+    }
+
+
+
+
+</script>

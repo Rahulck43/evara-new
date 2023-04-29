@@ -1,0 +1,72 @@
+<form action="/admin/addproduct" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="product name" class="form-label">product name</label>
+        <input required type="text"  name="name" class="form-control" id="name">
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">description</label>
+        <textarea required name="description" class="form-control" id="description" style="height: 6rem;"></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="price" class="form-label">price</label>
+        <input required type="text" name="price" class="form-control" id="price" onkeyup="return validatePrice()">
+        <span id="price-error" style="color: red; font-size: 12px; margin-top: 5px;"></span>
+    </div>
+    <div class="mb-3">
+        
+        <label class="form-label"> Product Category</label>
+        <select required class="form-control" name="category">
+            <label class="form-label"> Product Category</label>
+            <option value="" selected disabled>Select Category</option>
+            <% categories.forEach(function(category){ %>
+            <option ><%= category.category %></option>
+            <% }) %>
+            <!-- <option value="women">WOMEN</option>
+            <option value="kids">KIDS</option> -->
+        </select>
+        
+    </div>
+    <div class="mb-3">
+        <label for="quantity" class="form-label">quantity</label>
+        <input required type="text" name="quantity" class="form-control" id="quantity" onkeyup="return validateQuantity()">
+        <span id="quantity-error" style="color: red; font-size: 12px; margin-top: 5px;"></span>
+    </div>
+    <div class="mb-3">
+        <label for="images">Images:</label>
+        <input type="file" name="testImage" id="testImage" multiple>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<script>
+
+
+    function validatePrice() {
+        const regPrice = /^[1-9][0-9]*$/;
+        const price = document.getElementById('price').value
+        if (!regPrice.test(price)) {
+            document.getElementById('price-error').innerHTML = 'price should be greater than zero'
+            return false
+        } else {
+            document.getElementById('price-error').innerHTML = ''
+            return true
+        }
+    }
+
+    function validateQuantity() {
+        const regQuantity= /^[1-9][0-9]*$/
+        const quantity=document.getElementById('quantity').value
+        if (!regQuantity.test(quantity)) {
+            document.getElementById('quantity-error').innerHTML = 'quantity should be greater than zero'
+            return false
+        } else {
+            document.getElementById('quantity-error').innerHTML = ''
+            return true
+        }
+    }
+
+    
+
+
+
+</script>

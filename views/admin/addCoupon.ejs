@@ -1,0 +1,71 @@
+<div style="width: 35rem;">
+  <form action="/admin/add-coupon" method="POST">
+    <div class="row mb-3">
+      <label for="couponName" class="col-sm-3 col-form-label">Coupon Name</label>
+      <div class="col-sm-9">
+        <input required type="text" name="couponName" class="form-control" id="couponName">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="couponCode" class="col-sm-3 col-form-label">Coupon Code</label>
+      <div class="col-sm-9">
+        <input required type="text" name="couponCode" class="form-control" id="couponCode">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="validity" class="col-sm-3 col-form-label">Validity</label>
+      <div class="col-sm-9">
+        <input required type="date" name="validity" class="form-control" id="validity">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="minAmount" class="col-sm-3 col-form-label">Min Purchase</label>
+      <div class="col-sm-9">
+        <input required type="text" name="minAmount" class="form-control" id="minAmount"onkeyup="return validateValue('minAmount','min-amount-error')">
+        <span id="min-amount-error" style="color: red; font-size: 12px; margin-top: 5px;"></span>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="discount" class="col-sm-3 col-form-label">Discount(%)</label>
+      <div class="col-sm-9">
+        <input required type="text" name="discount" class="form-control" id="discount"onkeyup="return validateValue('discount','discount-error')">
+        <span id="discount-error" style="color: red; font-size: 12px; margin-top: 5px;"></span>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="maxDiscount" class="col-sm-3 col-form-label">Max Discount</label>
+      <div class="col-sm-9">
+        <input required type="text" name="maxDiscount" class="form-control" id="maxDiscount"onkeyup="return validateValue('maxDiscount','max-discount-error')">
+        <span id="max-discount-error" style="color: red; font-size: 12px; margin-top: 5px;"></span>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="description" class="col-sm-3 col-form-label">Description</label>
+      <div class="col-sm-9">
+        <textarea  required type="text" name="description" class="form-control" id="description" style="height: 7.5rem;"></textarea>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="float: right;">Generate Coupon</button>
+  </form>
+</div>
+
+
+
+
+<script>
+
+function validateValue(inputId, errorId) {
+    const regPrice = /^[1-9][0-9]*$/;
+    const price = document.getElementById(inputId).value;
+    if (!regPrice.test(price)) {
+        document.getElementById(errorId).innerHTML = 'Value should be greater than zero.';
+        return false;
+    } else {
+        document.getElementById(errorId).innerHTML = '';
+        return true;
+    }
+}
+
+
+</script>

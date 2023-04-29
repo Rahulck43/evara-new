@@ -1,0 +1,149 @@
+<% if(locals.category){ %>
+    <!-- edit Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="/admin/editcategory/<%= category._id %>" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Edit category</h5>
+                        <a href="/admin/category"> <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button></a>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" value="<%= category.category %>" name="category" class="form-control"
+                            id="category">
+                            <input type="text" value="<%= category.category %>" name="oldCategory" class="form-control" hidden
+                            id="category">
+                    </div>
+                    <div class="modal-footer">
+                        <a href="/admin/category"><button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">Close</button></a>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.onload = function () {
+            document.getElementById('editcategory').click()
+        }
+    </script>
+    <% } else { %>
+        <!-- modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="/admin/addcategory" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Enter new category</h5>
+                            <a href="/admin/category"> <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button> </a>
+                        </div>
+                        <div class="modal-body">
+                            <input type="text" name="category" class="form-control" id="category">
+                        </div>
+                        <div class="modal-footer">
+                            <a href="/admin/category"><button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Close</button></a>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+
+
+            <table class="table table-hover" id="category-table" style="width: 50rem;">
+                <thead>
+                    <tr>
+                        <th scope="col">No.</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">status</th>
+                        <th><button type="button" class="btn btn-success float-end " id="editcategory"
+                                data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                Add Category
+                            </button></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% categories.forEach(function(category,index){ %>
+                        <tr>
+                            <th scope="row">
+                                <%= index+1 %>
+                            </th>
+                            <td>
+                                <%= category.category %>
+                            </td>
+                            <td scope="row" id="<%= category._id %>-status">
+                                <%= category.status %>
+                            </td>
+
+                            <td><a href="/admin/category/<%= category._id %>"><button type="button"
+                                        class="btn btn-primary ">
+                                        Edit
+                                    </button></a>
+                                <% if(category.status) { %>
+                                    <button type="button" id="<%= category._id %>-disable" class="btn btn-danger"
+                                        onclick="toggleCategory('<%= category._id %>')">Disable</button>
+                                    <% } else { %>
+                                        <button type="button" id="<%= category._id %>-enable" class="btn btn-success"
+                                            onclick="toggleCategory('<%= category._id %>')">Enable</button>
+                                        <% } %>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+
+
+
+            <script>
+
+
+                $(document).ready(function () {
+                    $('#category-table').DataTable();
+                });
+
+
+
+                function toggleCategory(catId) {
+                    fetch('/admin/toggle-category/' + catId, { method: 'get' })
+                        .then(response => {
+                            if (response.ok) {
+                                const buttonEnable = document.getElementById(`${catId}-enable`);
+                                const buttonDisable = document.getElementById(`${catId}-disable`);
+                                const status = document.getElementById(`${catId}-status`);
+                                if (buttonEnable) {
+                                    buttonEnable.innerHTML = 'disable';
+                                    buttonEnable.classList.toggle('btn-success');
+                                    buttonEnable.classList.toggle('btn-danger');
+                                    buttonEnable.setAttribute('id', `${catId}-disable`)
+                                    status.innerHTML = 'true'
+                                    toastr.success('product enabled')
+                                }
+                                if (buttonDisable) {
+                                    buttonDisable.innerHTML = 'enable';
+                                    buttonDisable.classList.toggle('btn-danger');
+                                    buttonDisable.classList.toggle('btn-success');
+                                    buttonDisable.setAttribute('id', `${catId}-enable`)
+                                    status.innerHTML = 'false'
+                                    toastr.warning('product disabled')
+                                }
+                            } else {
+                                alert('Error toggling product');
+                            }
+                        })
+                        .catch(error => {
+                            alert('Error toggling product: ' + error);
+                        });
+                }
+
+
+
+
+            </script>

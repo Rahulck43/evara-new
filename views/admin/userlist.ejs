@@ -1,0 +1,88 @@
+
+
+
+<table class="table table-hover" id="userTable" style="width: 50rem;">
+    <thead>
+        <tr>
+            <th scope="col">No.</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Status</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <% users.forEach(function(user,index) { %>
+            <tr>
+                <th scope="row">
+                    <%= index+1 %>
+                </th>
+                <td>
+                    <%= user.name %>
+                </td>
+                <td>
+                    <%= user.email %>
+                </td>
+                <td id="<%= user._id %>status">
+                    <%= user.status %>
+                </td>
+                <td>
+                    <% if (user.status) { %>
+                        <button type="button" data-value="<%= user._id %>" class="btn btn-danger blockButton"
+                            id="<%= user._id %>blockBtn">Block User</button>
+
+                        <% } else { %>
+
+                            <button type="button" data-value="<%= user._id %>" class="btn btn-success blockButton"
+                                id="<%= user._id %>unBlockBtn">Unblock User</button>
+
+                            <% } %>
+                </td>
+            </tr>
+            <% }) %>
+    </tbody>
+</table>
+</div></section>
+
+
+<script>
+
+
+    $(document).ready(function () {
+        $('#userTable').DataTable();
+    });
+
+
+    $(document).ready(function () {
+        $(".blockButton").click(function () {
+            const userId = $(this).data("value");
+            console.log('userId=', userId);
+            const confirmation = confirm('Are you sure you want to toggle this user?');
+            if (confirmation) {
+                $.ajax({
+                    type: "put",
+                    url: "/admin/userlist/" + userId,
+                })
+                    .done((res) => {
+                        if (res) {
+                            $(`#${userId}unBlockBtn`).removeClass('btn-success').addClass('btn-danger').html('Block User')
+                            $(`#${userId}blockBtn`).removeClass('btn-success').addClass('btn-danger').html('Block User')
+                            $(`#${userId}status`).html(res)
+                        }
+                        else {
+                            $(`#${userId}blockBtn`).removeClass('btn-danger').addClass('btn-success').html('Unblock User')
+                            $(`#${userId}unBlockBtn`).removeClass('btn-danger').addClass('btn-success').html('Unblock User')
+                            $(`#${userId}status`).html('false')
+
+                        }
+                    })
+                    .fail((err) => {
+                        console.log(err.responseJSON.error);
+                    });
+            }
+        });
+    });
+
+
+
+</script>

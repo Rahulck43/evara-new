@@ -1,0 +1,171 @@
+<body>
+  
+
+<main class="main">
+  <div class="page-header breadcrumb-wrap">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html" rel="nofollow">Home</a>
+        <span></span> My account
+        <span></span> Order details
+      </div>
+    </div>
+  </div>
+  <section class="mt-70 mb-60">
+    <div class="container">
+      <div class="row order-wrap mx-auto">
+        <div >
+          <a href="/invoice/<%= orderDetails.id %>"><button id="" class="btn btn-sm btn-secondary">
+            <i class="fi-rs-shopping-bag mr-5"></i>Download Invoice
+          </button></a>
+        </div>
+        <div class="text-end mb-60">
+          <a href="/my-orders" class="btn btn-outline btn-lg btn-brand-outline font-weight-bold text-brand bg-white text-hover-white border-radius-5 btn-shadow-brand hover-up">Back to all orders</a>
+        </div>
+      </div>
+      <div class="row order-wrap mx-auto">
+        <div class="col-4 pe-3">
+          <h4 class="mb-35 text-brand">Delivery Address</h4>
+          <div class="table-responsive">
+            <table class="table shopping-summery">
+              <tbody>
+                <tr>
+                  <!-- TODO exeption if no category is found -->
+                  <td>Name: </td>
+                  <td><b><%= orderDetails.name %> </b></td>
+                </tr>
+                <tr>
+                  <td>Phone: </td>
+                  <td><b><%= orderDetails.phone %> </b></td>
+                </tr>
+                <tr>
+                  <td>Address: </td>
+                  <td><%= orderDetails.billingAddress %>, <%= orderDetails.city %></td>
+                </tr>
+                <tr>
+                  <td>Zipcode: </td>
+                  <td><%= orderDetails.zipcode %></td>
+                </tr>
+                <tr>
+                  <td>State: </td>
+                  <td><%= orderDetails.state %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-4">
+          <h4 class="mb-35 text-brand">Order Details</h4>
+          <table class="table shopping-summery">
+            <tbody>
+              <tr>
+                <td>Order ID: </td>
+                <td><%= orderDetails.id %></td>
+              </tr>
+              <tr>
+                <td>Items: </td>
+                <td><%= orderDetails.products.length %></td>
+              </tr>
+              <tr>
+                <td>date: </td>
+                <td>
+                  <% const [day,month,date,year] = orderDetails.date.toString().split(' ') %>
+                  <%= `${date}-${month}-${year}, ${day}` %>
+                </td>
+              </tr>
+              <tr>
+                <td>Payment method: </td>
+                <td><%= orderDetails.paymentOption %></td>
+              </tr>
+              <tr>
+                <td>Total Amount: </td>
+                <td> 
+                  <%
+                  let totalPrice=0;
+                    orderDetails.products.forEach(element => {
+                    totalPrice += parseInt(element.price*element.quantity) 
+                  })
+                    %>
+                    ₹<%= totalPrice %>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        
+        
+      </div>
+    </div>
+  </section>
+  <section class="mt-50 mb-70">
+    <div class="container">
+      <div class="row order-wrap mx-auto">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table shopping-summery text-center">
+              <thead>
+                <tr class="main-heading">
+                  <th scope="col">Image</th>
+                  <th scope="col">Product</th>
+                  <th scope="col">Unit price</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Order Status</th>
+                  <!-- <th scope="col">Payment Status</th> -->
+                  <!-- <th scope="col">Action</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <% orderDetails.products.forEach(element => { %>
+                <tr class="-tr">
+                  <td class="image product-thumbnail">
+                      <img style="height: 3rem;" src="/images/<%= element.images[0] %>"  alt="#">
+                    </a>
+                  </td>
+                  <td class="product-des product-name">
+                    <h5 class="product-name"><%= element.name %></h5>
+                  </td>
+                  <td class="text-center">
+                    ₹<%= element.price %>
+                  </td>
+                  <td class="text-center"><%= element.quantity %></td>
+                  <td class="price" data-title="Price">₹<%= element.price * element.quantity %> </span></td>
+                  <td class="text-center" >
+                    <span class="color3 font-weight-bold">
+                      <span class="badge rounded-pill alert-warning"><%= orderDetails.status %></span>
+
+                    </span>
+                  </td>
+                  <!-- <td class="text-right" data-title="">
+                     element.paymentstatus
+                  </td> -->
+                  <!-- <td class="button-td">                 -->
+                    <!-- <button id="<%= element.id %>" class="btn btn-sm btn-secondary" onclick="cancelOrder('<%= orderDetails.id %>','<%= element.id %>')">
+                      <i class="fi-rs-shopping-bag mr-5"></i>Return order
+                    </button> --> 
+                  <!-- </td> -->
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+</body>
+
+
+
+
+<script>
+
+
+
+  
+</script>
+
+

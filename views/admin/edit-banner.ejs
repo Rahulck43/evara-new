@@ -1,0 +1,48 @@
+<form action="/admin/edit-banner/<%= bannerDetails._id %>" method="POST" >
+    <div class="mb-3">
+        <label for="banner name" class="form-label">Banner name</label>
+        <input type="text" required value="<%= bannerDetails.name %>" name="name" class="form-control" id="name"
+            aria-describedby="emailHelp">
+
+    </div>
+    <div class="mb-3">
+        <label for="header 1" class="form-label">Header 1</label>
+        <input type="text" required value="<%= bannerDetails.header1 %>" name="header1" class="form-control" id="header1">
+
+    </div>
+    <div class="mb-3">
+        <label for="header 2" class="form-label">Header 2</label>
+        <input type="text" required value="<%= bannerDetails.header2 %>" name="header2" class="form-control" id="header2">
+
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <input type="text" required value="<%= bannerDetails.description %>" name="description" class="form-control" id="description">
+
+    </div>
+    <div class="mb-3">
+        <label for="link" class="form-label">Link</label>
+        <input type="text" required value="<%= bannerDetails.link %>" name="link" class="form-control" id="link">
+
+    </div>
+    
+    <div class="row mb-3">
+        <label for="bannerStatus" class="col-sm-3 col-form-label">Status</label>
+        <div class="col-sm-9">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="status" id="bannerStatusTrue" value="true" <%= bannerDetails.status ? 'checked' : '' %>>
+                <label class="form-check-label" for="bannerStatusTrue">True</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="status" id="bannerStatusFalse" value="false" <%= !bannerDetails.status ? 'checked' : '' %>>
+                <label class="form-check-label" for="bannerStatusFalse">False</label>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="images">Images</label>
+        <input type="file" name="image" id="image" value="bannerDetails.image" >
+        <img src="/user-assets/imgs/slider/<%= bannerDetails.image %> " id="previewImage" alt="" style="height: 4rem;">
+    </div>
+    <button type="submit" id="<%= bannerDetails._id %>" class="btn btn-primary">Submit</button></a>
+</form>

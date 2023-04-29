@@ -1,0 +1,441 @@
+<body>
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="/" rel="nofollow">Home</a>
+                    <span></span> Pages
+                    <span></span> Account
+                </div>
+            </div>
+        </div>
+        <section class="pt-90 pb-150">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 m-auto " style="margin: 0!important">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="dashboard-menu">
+                                    <ul class="nav flex-column" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab"
+                                                href="#dashboard" role="tab" aria-controls="dashboard"
+                                                aria-selected="false"><i class="fi-rs-user mr-10"></i>Account
+                                                Overview</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link " id="wallet-tab" data-bs-toggle="tab" href="#wallet"
+                                                role="tab" aria-controls="wallet" aria-selected="false"><i
+                                                    class="fi-rs-user mr-10"></i>Wallet</a>
+                                        </li>
+                                        <!-- <li class="nav-item">
+                                            <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                                        </li> -->
+                                        <li class="nav-item">
+                                            <a class="nav-link " href="/my-orders" aria-selected="false"><i
+                                                    class="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="track-orders-tab" data-bs-toggle="tab"
+                                                href="#track-orders" role="tab" aria-controls="track-orders"
+                                                aria-selected="false"><i
+                                                    class="fi-rs-shopping-cart-check mr-10"></i>Change Password</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address"
+                                                role="tab" aria-controls="address" aria-selected="true"><i
+                                                    class="fi-rs-marker mr-10"></i>Edit or Add new Address</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab"
+                                                href="#account-detail" role="tab" aria-controls="account-detail"
+                                                aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/logout"><i
+                                                    class="fi-rs-sign-out mr-10"></i>Logout</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="tab-content dashboard-content">
+                                    <div class="tab-pane fade active show" id="dashboard" role="tabpanel"
+                                        aria-labelledby="dashboard-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="mb-0">Hello <%= user.name %>
+                                                </h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="person-person"
+                                                    style=" margin-top: 7px; padding-bottom: unset;">
+                                                    <div class="person-background"
+                                                        style="    position: relative;background: #F5F5F6;height: 12rem;padding: 25px 30px;">
+                                                        <div class="person-infoWrapper">
+                                                            <div class="person-imageHolder"
+                                                                style=" height: 10rem;width: 8rem;display: inline; float: left;">
+                                                                <div class="person-defaultImage"
+                                                                    style="position: unset;">
+                                                                    <img src="user-assets/imgs/profile-image.png"
+                                                                        alt="user-profile-image"
+                                                                        style="  margin-top: 0.5rem;">
+                                                                </div>
+                                                            </div>
+                                                            <div class="person-infoHolder"
+                                                                style="height: 8rem; display: block;">
+                                                                <a class="person-editProfile" href="/edit-profile"
+                                                                    style="float: right;border: 1px solid #3E4152;border-radius: 2px;color: #3E4152;padding:2px;font-size: 10px;font-weight: 800;background-color: rgba(255,255,255,0.6);">
+                                                                    Edit Profile </a>
+                                                                <div
+                                                                    style="padding-block-start: 3rem;padding-left: 9rem; ">
+                                                                    <h6>
+                                                                        <%= user.email %>
+                                                                    </h6>
+                                                                    <br>
+                                                                    <h6>
+                                                                        <%= user.mobileNo %>
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row mt-30"
+                                                    style="display: flex;justify-content: center;align-items: center;">
+                                                    <div class="col-lg-4 ">
+                                                        <a class="link-card" href="/my-orders">
+                                                            <div class="card hoverable"
+                                                                style="height: 12rem;margin-bottom: 1rem; ">
+                                                                <div class="card-body"
+                                                                    style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
+                                                                    <img src="user-assets/imgs/profile-orders.png"
+                                                                        alt=""
+                                                                        style="height: 2.5rem;width: 2.5rem;margin-bottom: 1rem;">
+                                                                    <h5 class="card-title">Orders</h5>
+                                                                    <p class="card-text" style="font-size: 0.8rem;">
+                                                                        Check your order status</p>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <a class="link-card" href="/my/orders">
+                                                            <div class="card hoverable"
+                                                                style="height: 12rem; margin-bottom: 1rem;">
+                                                                <div class="card-body"
+                                                                    style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
+                                                                    <img src="user-assets/imgs/profile-collections.png"
+                                                                        alt=""
+                                                                        style="height: 2.5rem;width: 2.5rem;margin-bottom: 1rem;">
+                                                                    <h5 class="card-title">Wishlist</h5>
+                                                                    <p class="card-text" style="font-size: 0.8rem;">
+                                                                        Products that you saved for later</p>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <a class="link-card" href="">
+                                                            <div class="card hoverable"
+                                                                style="height: 12rem;margin-bottom: 1rem;">
+                                                                <div class="card-body"
+                                                                    style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
+                                                                    <img src="user-assets/imgs/profile-wallet.png"
+                                                                        alt=""
+                                                                        style="height: 2.5rem;width: 2.5rem;margin-bottom: 1rem;">
+                                                                    <h5 class="card-title">Your Wallet</h5>
+                                                                    <p class="card-text" style="font-size: 0.8rem;">
+                                                                        Manage all your refunds</p>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <a class="link-card" href="/my/orders">
+                                                            <div class="card hoverable" style="height: 12rem;">
+                                                                <div class="card-body"
+                                                                    style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
+                                                                    <img src="user-assets/imgs/profile-address.png"
+                                                                        alt=""
+                                                                        style="height: 2.5rem;width: 2.5rem;margin-bottom: 1rem;">
+                                                                    <h5 class="card-title">Addresses</h5>
+                                                                    <p class="card-text" style="font-size: 0.8rem;">Save
+                                                                        addresses for hassle-free checkout</p>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <a class="link-card" href="/my/orders">
+                                                            <div class="card hoverable" style="height: 12rem;">
+                                                                <div class="card-body"
+                                                                    style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
+                                                                    <img src="user-assets/imgs/profile-coupons.png"
+                                                                        alt=""
+                                                                        style="height: 2.5rem;width: 2.5rem;margin-bottom: 1rem;">
+                                                                    <h5 class="card-title">Coupons</h5>
+                                                                    <p class="card-text" style="font-size: 0.8rem;">
+                                                                        Manage coupons for additional discounts</p>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <a class="link-card" href="/my/orders">
+                                                            <div class="card hoverable" style="height: 12rem;">
+                                                                <div class="card-body"
+                                                                    style="display: flex;justify-content: center;align-items: center;flex-direction: column;">
+                                                                    <img src="user-assets/imgs/profile-edit.png" alt=""
+                                                                        style="height: 2.5rem;width: 2.5rem;margin-bottom: 1rem;">
+                                                                    <h5 class="card-title">Profile Details</h5>
+                                                                    <p class="card-text" style="font-size: 0.8rem;">
+                                                                        Manage your profile details</p>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- wallet page -->
+                                    <div class="tab-pane fade " id="wallet" role="tabpanel"
+                                        aria-labelledby="wallet-tab">
+                                        <div class="col-lg-6  " style="margin-left: 3rem;">
+                                            <div class="card "
+                                                style="height: 25rem;width: 57rem; margin-bottom: 1rem; ">
+                                                <div class="card-body ">
+                                                    <div class="hoverable" style="height: 6rem;">
+                                                        <h3 class="card-title "
+                                                            style="margin-left: 1rem;padding-top: 2rem;">WALLET</h3>
+                                                    </div>
+                                                    <hr
+                                                        style="border-top: 2px solid gray; width: 55rem; margin: 0 auto; margin-bottom: 1rem;">
+
+                                                    <p class="card-text" style="font-size: 1.5rem; padding-top: 2rem;">
+                                                        Your wallet balance is: ₹ <%= locals.wallet %>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="mb-0">Your Orders</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Order</th>
+                                                                <th>Date</th>
+                                                                <th>Status</th>
+                                                                <th>Total</th>
+                                                                <th>Actions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>#1357</td>
+                                                                <td>March 45, 2020</td>
+                                                                <td>Processing</td>
+                                                                <td>$125.00 for 2 item</td>
+                                                                <td><a href="#" class="btn-small d-block">View</a></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>#2468</td>
+                                                                <td>June 29, 2020</td>
+                                                                <td>Completed</td>
+                                                                <td>$364.00 for 5 item</td>
+                                                                <td><a href="#" class="btn-small d-block">View</a></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>#2366</td>
+                                                                <td>August 02, 2020</td>
+                                                                <td>Completed</td>
+                                                                <td>$280.00 for 3 item</td>
+                                                                <td><a href="#" class="btn-small d-block">View</a></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="track-orders" role="tabpanel"
+                                        aria-labelledby="track-orders-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="mb-0">Orders tracking</h5>
+                                            </div>
+                                            <div class="card-body contact-from-area">
+                                                <p>To track your order please enter your OrderID in the box below and
+                                                    press "Track" button. This was given to you on your receipt and in
+                                                    the confirmation email you should have received.</p>
+                                                <div class="row">
+                                                    <div class="col-lg-8">
+                                                        <form class="contact-form-style mt-30 mb-50" action="#"
+                                                            method="post">
+                                                            <div class="input-style mb-20">
+                                                                <label>Order ID</label>
+                                                                <input name="order-id"
+                                                                    placeholder="Found in your order confirmation email"
+                                                                    type="text" class="square">
+                                                            </div>
+                                                            <div class="input-style mb-20">
+                                                                <label>Billing email</label>
+                                                                <input name="billing-email"
+                                                                    placeholder="Email you used during checkout"
+                                                                    type="email" class="square">
+                                                            </div>
+                                                            <button class="submit submit-auto-width"
+                                                                type="submit">Track</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Address page -->
+                                    <div class="tab-pane fade" id="address" role="tabpanel"
+                                        aria-labelledby="address-tab">
+                                        <div class="addAddressBar-card col-lg-10 mb-3"
+                                                style="margin-left: 34rem; box-shadow: 0px 0px 0px; border: 0.5px solid #d4d5d9; border-radius: 4px; font-weight: 800; color: #526cd0; padding: 12px; text-align: center; width: 180px; cursor: pointer;">
+                                                <a href="/add-address">
+                                                    <div class="addAddressBar-addText"> + Add New Address
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        <% if(locals.addresses){ %>
+                                            <% addresses.forEach(function(address){ %>
+                                        <div class="row">
+                                            <!-- <div class="col-lg-6"> -->
+                                            
+                                            <div class="card hoverable" style="height: 14rem; margin-bottom: 1rem;">
+
+                                                <div class="card-body"
+                                                    style="display: flex; justify-content: space-between;  flex-direction: column;">
+                                                        <div>
+                                                            <span>
+                                                                <h4 style="color: #696E79; font-size: 15px;"><strong><%= address.name %>
+                                                                </strong></h4>
+                                                            </span>
+                                                            <!-- <span class="badge bg-secondary rounded-pill" style="float: right;">office</span> -->
+                                                        </div>
+                                                        <div style="margin-bottom: .5rem;">
+                                                            <h5
+                                                                style="line-height: 1.5; color: #696E79; font-size: 13px;">
+                                                                <%= address.address %></h5>
+                                                            <h5
+                                                                style="line-height: 1.5; color: #696E79; font-size: 13px;">
+                                                                <%= address.city %></h5>
+                                                            <h5
+                                                                style="line-height: 1.5; color: #696E79; font-size: 13px;">
+                                                                district</h5>
+                                                            <h5
+                                                                style="line-height: 1.5; color: #696E79; font-size: 13px;">
+                                                                <%= address.state %></h5>
+                                                            <h5
+                                                                style="line-height: 1.5; color: #696E79; font-size: 13px;">
+                                                                <%= address.zipcode %></h5>
+                                                            <h5
+                                                                style="line-height: 1.5; color: #696E79; font-size: 13px;">
+                                                                <%= address.phone %></h5>
+                                                        </div>
+                                                        <div
+                                                            style="height: 2.5rem; border: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center;">
+                                                            <div class="col-lg-6"
+                                                                style="border-right: 1px solid #dee2e6; display: flex; justify-content: center; align-items: center;">
+                                                                <span><a href="/edit-address?address=<%= JSON.stringify(address) %>"> Edit </a></span>
+                                                            </div>
+                                                            <div class="col-lg-6"
+                                                                style="display: flex; justify-content: center; align-items: center;">
+                                                                <span style="float: right;"><a href="/remove-address?address=<%= JSON.stringify(address) %>"> Remove </a></span>
+                                                            </div>
+                                                        </div>
+                                                        
+
+                                                </div>
+                                            </div>
+                                            <!-- </div> -->
+
+                                        </div>
+                                        <% }) %>
+                                                        <% } %>
+                                    </div>
+                                    <div class="tab-pane fade" id="account-detail" role="tabpanel"
+                                        aria-labelledby="account-detail-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>Account Details</h5>
+                                            </div>
+                                            <div class="card-body">
+                                               
+                                                <form method="post" name="enq">
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <label>First Name <span class="required">*</span></label>
+                                                            <input required="" class="form-control square" name="name"
+                                                                type="text">
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label>Last Name <span class="required">*</span></label>
+                                                            <input required="" class="form-control square" name="phone">
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label>Display Name <span class="required">*</span></label>
+                                                            <input required="" class="form-control square" name="dname"
+                                                                type="text">
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label>Email Address <span class="required">*</span></label>
+                                                            <input required="" class="form-control square" name="email"
+                                                                type="email">
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label>Current Password <span
+                                                                    class="required">*</span></label>
+                                                            <input required="" class="form-control square"
+                                                                name="password" type="password">
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label>New Password <span class="required">*</span></label>
+                                                            <input required="" class="form-control square"
+                                                                name="npassword" type="password">
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label>Confirm Password <span
+                                                                    class="required">*</span></label>
+                                                            <input required="" class="form-control square"
+                                                                name="cpassword" type="password">
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <button type="submit" class="btn btn-fill-out submit"
+                                                                name="submit" value="Submit">Save</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+
+<style>
+    .hoverable:hover {
+        box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.2);
+    }
+</style>

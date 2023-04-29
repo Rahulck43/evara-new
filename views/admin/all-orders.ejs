@@ -1,0 +1,171 @@
+<div class="card mb-4">
+    <div class="card-body" style="width: 60rem;">
+        <div class="table-responsive">
+            <table class="table table-hover" id="ordersTable">
+                <thead>
+                    <tr>
+                        <th scope="col">Deliver to:</th>
+                        <th>#ID</th>
+                        <th scope="col">Items</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Payment</th>
+                        <th scope="col">Order Status</th>
+                        <th scope="col">Date</th>
+                        <th scope="col" class="text-end"> Action </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% orders.forEach(order=>{
+                        const[day,month,date,year]=order.date.toString().split(' ')
+                        %>
+                        <tr>
+                            <td>
+                                <%= order.name %>
+                            </td>
+                            <td><a href="/admin/order/<%= order._id %>">
+                                    <%= order._id %>
+                                </a>
+                            </td>
+                            <td>
+                                <%= order.products.length %>
+                            </td>
+                            <td>₹<%= order.totalAmount %>
+                            </td>
+                            <td>
+                                <%= order.payment_option %>
+                            </td>
+                            <td>
+                                <% if (order.status==='Order Placed' ) { %>
+                                    <span class="badge rounded-pill alert-primary">
+                                        <%= order.status %>
+                                    </span>
+                                    <% } else if (order.status==='Pending' ) { %>
+                                        <span class="badge rounded-pill alert-warning">
+                                            <%= order.status %>
+                                        </span>
+                                        <% } else if (order.status==='Dispatched' ) { %>
+                                            <span class="badge rounded-pill alert-warning">
+                                                <%= order.status %>
+                                            </span>
+                                            <% } else if (order.status==='Delivered' ) { %>
+                                                <span class="badge rounded-pill alert-success">
+                                                    <%= order.status %>
+                                                </span>
+                                                <% } else if (order.status==='Returned' ) { %>
+                                                    <span class="badge rounded-pill alert-secondary">
+                                                        <%= order.status %>
+                                                    </span>
+                                                    <% } else if (order.status==='Cancelled' ) { %>
+                                                        <span class="badge rounded-pill alert-danger">
+                                                            <%= order.status %>
+                                                        </span>
+                                                        <% } %>
+                            </td>
+                            <td>
+                                <%= `${date}-${month}-${year}` %>
+                            </td>
+                        <td>
+                            <% if (order.status==='Pending') { %>
+                                <div class="dropdown">
+                                  <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
+                                       id="<%= order._id %>" data-bs-toggle="dropdown" aria-expanded="false">
+                                      <i class="fi-rs-shopping-bag mr-5"></i>
+                                      <%= order.status %>
+                                  </button>
+                                  <ul class="dropdown-menu" aria-labelledby="<%= order._id %>">
+                                      <li><a href="/admin/update-order-status/<%= order._id %>?status=Cancelled"
+                                              class="dropdown-item">Cancelled
+                                          </a>
+                                     </li>
+                                 </ul>
+                                </div>
+                            <% } else if(order.status==='Order Placed') { %>
+                                <div class="dropdown">
+                                  <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
+                                        id="<%= order._id %>" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fi-rs-shopping-bag mr-5"></i>
+                                        <%= order.status %>
+                                  </button>
+                                  <ul class="dropdown-menu" aria-labelledby="<%= order._id %>">
+                                      <li><a href="/admin/update-order-status/<%= order._id %>?status=Dispatched"
+                                              class="dropdown-item">Dispatched
+                                          </a>
+                                      </li>
+                                      <li><a href="/admin/update-order-status/<%= order._id %>?status=Delivered"
+                                              class="dropdown-item">Delivered
+                                          </a>
+                                      </li>
+                                      <li><a href="/admin/update-order-status/<%= order._id %>?status=Returned"
+                                              class="dropdown-item">Returned
+                                          </a>
+                                      </li>
+                                          <li><a href="/admin/update-order-status/<%= order._id %>?status=Cancelled"
+                                              class="dropdown-item">Cancelled
+                                          </a>
+                                      </li>
+                                 </ul>
+                               </div>
+                            <% } else if(order.status==='Dispatched') { %>
+                                <div class="dropdown">
+                                  <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
+                                        id="<%= order._id %>" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fi-rs-shopping-bag mr-5"></i>
+                                        <%= order.status %>
+                                  </button>
+                                  <ul class="dropdown-menu" aria-labelledby="<%= order._id %>">
+                                      <li><a href="/admin/update-order-status/<%= order._id %>?status=Delivered"
+                                              class="dropdown-item">Delivered
+                                          </a>
+                                      </li>
+                                      <li><a href="/admin/update-order-status/<%= order._id %>?status=Cancelled"
+                                              class="dropdown-item">Cancelled
+                                          </a>
+                                      </li>
+                                          <li><a href="/admin/update-order-status/<%= order._id %>?status=Returned"
+                                             class="dropdown-item">Returned
+                                          </a>
+                                      </li>
+                                 </ul>
+                                </div>
+                            <% } else if(order.status==='Delivered') { %>
+                                <div class="dropdown">
+                                  <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
+                                        id="<%= order._id %>" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fi-rs-shopping-bag mr-5"></i>
+                                        <%= order.status %>
+                                  </button>
+                                  <ul class="dropdown-menu" aria-labelledby="<%= order._id %>">
+                                      <li><a href="/admin/update-order-status/<%= order._id %>?status=Returned"
+                                              class="dropdown-item">Returned
+                                          </a>
+                                      </li>
+                                  </ul>
+                                </div>     
+                            <% } %>
+                        </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script>
+
+    $(document).ready(function () {
+        $('#ordersTable').DataTable();
+    });
+
+
+
+
+
+
+</script>
