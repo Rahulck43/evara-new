@@ -40,7 +40,11 @@
                         class="text-primary material-icons md-monetization_on"></i></span>
                 <div class="text">
                     <h6 class="mb-1 card-title">Revenue</h6>
+                    <% if(currentMonthSales) { %>
                     <span>₹ <%= currentMonthSales.totalAmount %></span>
+                    <% } else { %>
+                    <span>₹ 0</span>
+                    <% } %>
                     <span class="text-sm">
                         On this month
                     </span>

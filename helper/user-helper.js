@@ -482,7 +482,8 @@ module.exports = {
         });
     },
 
-    generateInvoice: (orderDetails) => {
+    generateInvoice: (orderDetails) => {   
+        console.log(orderDetails)
         return new Promise((resolve, reject) => {
             const { id, name, billingAddress, city, district, state, zipcode, phone, paymentOption, status, products, date, totalAmount } = orderDetails;
 

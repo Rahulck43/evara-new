@@ -22,6 +22,8 @@ module.exports = {
             if (req.session.admin) {
                 const salesByMonth = await adminHelper.getSalesDetails()
                 const salesByYear = await adminHelper.getYearlySalesDetails()
+                console.log(salesByMonth);
+                console.log(salesByYear);
                 const orders = await adminHelper.allOrders()
                 const ordersByDate = await adminHelper.getOrdersByDate()
                 const categorySales = await adminHelper.getCategorySales()

@@ -3,7 +3,7 @@
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="index.html" rel="nofollow">Home</a>
+                    <a href="/" rel="nofollow">Home</a>
                     <span></span> Shop
                     <span></span> Checkout
                 </div>
@@ -364,11 +364,11 @@
 
 
     
-    function razorpayPayment(order) {
+ function razorpayPayment(order) {
         console.log('at razorpayPayment');
         console.log(order);
 
-var options = {
+      var options = {
     "key": "rzp_test_FjQy8eJvplPGuD", // Enter the Key ID generated from the Dashboard
     "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
     "currency": "INR",

@@ -20,8 +20,8 @@ module.exports = {
             const banners = await bannerHelper.getAllBanners()
             const products = await userHelper.getHomeProducts()
             if (user) {
-                const count = userHelper.getCartCount(user._id)
-                const wcount = userHelper.getWishlistCount(user._id)
+                const count = await userHelper.getCartCount(user._id)
+                const wcount = await userHelper.getWishlistCount(user._id)
                 res.render('user/index', { user, count, wcount, banners, products })
             } else {
                 res.render('user/index', { user, banners, products })
@@ -322,6 +322,7 @@ module.exports = {
     getInvoice: (req, res) => {
         const orderId = req.params.id
         userHelper.singleOrder(orderId).then((orderDetails) => {
+            console.log(orderDetails);
             userHelper.generateInvoice(orderDetails).then(() => {
                 res.download('invoice.pdf')
             }).catch((err) => {
